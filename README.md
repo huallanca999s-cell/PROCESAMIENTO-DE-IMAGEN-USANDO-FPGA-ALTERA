@@ -24,9 +24,9 @@ Este repositorio contiene la arquitectura de hardware, simulación y verificaci�
 A diferencia de un procesador secuencial, la FPGA procesa el flujo de datos (*stream processing*) mediante un pipeline concurrente. La ventana de $3 \times 3$ ($P_1$ a $P_9$) se construye continuamente a partir de la memoria mediante dos **Line Buffers** encadenados.
 
 <p align="center">
-  <img src="CAPTURAS/capturasimu.png" alt="Simulación en ModelSim" width="800">
+  <img src="CAPTURAS/arquitectura.png" alt="Aquitectura implementada en el FPGA" width="800">
   <br>
-  <em>Figura 1: Simulación del timing y sincronización de señales en ModelSim.</em>
+  <em>Figura 1: Aquitectura implementada en el FPGA.</em>
 </p>
 
 
@@ -37,16 +37,15 @@ Aquí se presentan las capturas de pantalla de las simulaciones temporales en Mo
 <p align="center">
   <img src="CAPTURAS/capturasimu.png" alt="Simulación en ModelSim" width="800">
   <br>
-  <em>Figura 1: Simulación del timing y sincronización de señales en ModelSim.</em>
+  <em>Figura 2: Simulación del timing y sincronización de señales en ModelSim.</em>
 </p>
 
 <p align="center">
   <img src="CAPTURAS/resultado.png" alt="Resultado del Filtro de Imagen" width="700">
   <br>
-  <em>Figura 2: Comparativa de la imagen original y el resultado tras aplicar el filtro de ventana en FPGA.</em>
+  <em>Figura 3: Comparativa de la imagen original y el resultado tras aplicar el filtro de ventana en FPGA.</em>
 </p>
 
-*(Asegúrate de ajustar las rutas de las imágenes en las etiquetas `<img>` según tus carpetas).*
 
 ---
 
@@ -55,9 +54,23 @@ Aquí se presentan las capturas de pantalla de las simulaciones temporales en Mo
 Este proyecto fue desarrollado en el entorno académico como parte del trabajo de diseño digital avanzado en FPGA.
 
 * **Autores:**
-  * Erick Isaias Huallanca Perez
+  * Erick Isaias Huallanca Perez - Contacto: [LinkedIn](https://www.linkedin.com/in/erick-isaias-huallanca-perez-925b7632b) | [huallanca999s@gmail.com](mailto:huallanca999s@gmail.com)
   * Po Cheng Chien Chang
 * **Contribuciones Clave:**
   * Diseño de la arquitectura de hardware y búferes de línea.
   * Implementación y síntesis de la lógica en Intel Quartus.
   * Verificación mediante testbenches y análisis de timing en ModelSim.
+ 
+ ```
+├── ARCHIVOS DEL PROYECTO/
+│   ├── codigo_vdjñ            # Conjunto de archivos para la implementacion
+│   ├── matlab                 # Codigo necesario de preprocesamiento de la imagen a filtrar (Sorting Network 3x3)
+├── DOCUMENTACION
+|   ├── manual_DE2_115         # Módulo Top-Level (Control de direcciones, contadores y FSM)
+│   ├── presentación           # Archivo de presentación del proyecto     
+├── CAPTURAS/                  # Imágenes de apoyo y referencia
+│   ├── capturasimu.png
+│   └── resultado.png
+|   └── fpga.png
+|   └── arquitectura.png
+└── README.md                  # Documentación principal del repositorio
