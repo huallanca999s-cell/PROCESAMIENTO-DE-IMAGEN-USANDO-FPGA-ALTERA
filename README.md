@@ -1,31 +1,36 @@
-# Procesamiento de Imágenes en FPGA mediante Filtro de Ventana
+# Filtro de Mediana en Hardware (FPGA Altera DE2-115) para Reducción de Ruido Sal y Pimienta
 
-Este repositorio contiene la implementación en hardware para el procesamiento digital de imágenes en tiempo real utilizando una FPGA. El proyecto implementa un algoritmo de filtrado espacial por matriz/ventana (kernel) sobre una arquitectura de hardware descripta en VHDL/Verilog y sintetizada mediante Intel Quartus Prime.
-
----
-
-## Especificaciones Técnicas y Herramientas
-
-* **Entorno de Desarrollo:** Intel Quartus Prime Lite
-* **Herramienta de Simulación:** ModelSim
-* **Lenguaje de Descripción de Hardware:** VHDL
-* **Target Device:** FPGA Intel/Altera Cyclone IV EP4CE115F29C7
-* **Operación de Procesamiento:** Filtro mediana 3x3
+Este repositorio contiene la arquitectura de hardware, simulación y verificación en circuito de un **acelerador para el procesamiento digital de imágenes en tiempo real** implementado en VHDL. El sistema ejecuta un **filtro de mediana no lineal con ventana deslizante de $3 \times 3$** utilizando la estrategia de procesamiento de bordes **Valid-Only**, diseñado específicamente para la eliminación de ruido impulsivo (*Sal y Pimienta*) en imágenes en escala de grises ($204 \times 204$ píxeles, 8 bits/píxel).
 
 ---
 
-## Arquitectura del Sistema
+## Especificaciones Técnicas y Entorno de Desarrollo
 
-El sistema recibe un flujo de datos de imagen pixel por pixel y utiliza **buffers de línea (Line Buffers)** y registros en cascada para conformar la ventana espacial requerida para la convolución en hardware.
-
-1. **Recepción y Buffering:** Captura de píxeles en escala de grises y almacenamiento temporal para acceso paralelo a la vecindad $3 \times 3$.
-2. **Unidad del Filtro (Kernel):** Arreglo de multiplicadores y acumuladores para aplicar los coeficientes del filtro.
-3. **Control de Desbordamiento y Normalización:** Ajuste de los valores resultantes al rango de píxeles ($0 - 255$).
-4. **Salida:** Generación de la imagen filtrada sincronizada con la señal de reloj principal.
+* **Placa de Desarrollo:** Terasic DE2-115
+* **Target FPGA:** Altera Cyclone IV E (`EP4CE115F29C7`)
+* **Entornos de Software:** 
+  * **Intel Quartus II / Prime Web Edition v13.0** (Síntesis, Place & Route, In-System Memory Content Editor)
+  * **ModelSim / Quartus EDA Simulation** (Simulación funcional y análisis de formas de onda)
+  * **MATLAB** (Generación de archivos `.mif`, adición de ruido y reconstrucción visual final)
+* **Parámetros del Sistema:**
+  * **Resolución de Imagen:** $204 \times 204$ píxeles ($41,616$ direcciones de memoria BRAM)
+  * **Formato de Píxel:** 8 bits en escala de grises ($0 = \text{negro}$, $255 = \text{blanco}$)
+  * **Frecuencia de Reloj:** $50\text{ MHz}$ (`CLK_50` - Periodo de $20\text{ ns}$)
 
 ---
 
-## 📊 Resultados y Simulación
+## Arquitectura RTL y Flujo de Datos en Pipeline
+
+A diferencia de un procesador secuencial, la FPGA procesa el flujo de datos (*stream processing*) mediante un pipeline concurrente. La ventana de $3 \times 3$ ($P_1$ a $P_9$) se construye continuamente a partir de la memoria mediante dos **Line Buffers** encadenados.
+
+<p align="center">
+  <img src="CAPTURAS/capturasimu.png" alt="Simulación en ModelSim" width="800">
+  <br>
+  <em>Figura 1: Simulación del timing y sincronización de señales en ModelSim.</em>
+</p>
+
+
+## Resultados y Simulación
 
 Aquí se presentan las capturas de pantalla de las simulaciones temporales en ModelSim y los resultados del procesamiento de imagen (Original vs. Filtrada):
 
