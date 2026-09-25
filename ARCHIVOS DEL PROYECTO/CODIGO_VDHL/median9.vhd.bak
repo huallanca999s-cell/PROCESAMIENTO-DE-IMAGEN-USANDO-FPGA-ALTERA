@@ -1,0 +1,162 @@
+-- median9.vhdl
+-- Implementa una Red de Ordenamiento (Sorting Network) para encontrar la mediana de 9 valores.
+-- Topología: Batcher Odd-Even Merge Sort (25 comparadores en 6 etapas).
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity median9 is
+    port (
+        -- 9 Entradas de Píxeles (8 bits cada uno)
+        P1, P2, P3, P4, P5, P6, P7, P8, P9 : in  std_logic_vector(7 downto 0);
+        
+        -- Salida: Mediana de 8 bits (El 5to valor ordenado)
+        Mediana_Out                        : out std_logic_vector(7 downto 0)
+    );
+end entity median9;
+
+architecture structural of median9 is
+
+    -- Definición del Tipo para el Vector de 9 píxeles (para facilidad de manejo)
+    type pixel_array is array (1 to 9) of std_logic_vector(7 downto 0);
+
+    -- Función Auxiliar: Comparador/Selector (combina 2 entradas, devuelve [Min, Max])
+    -- Esta función se usa para instanciar el comparador de manera combinacional.
+    function comparator_select (A, B: std_logic_vector(7 downto 0)) 
+        return std_logic_vector is
+        variable Min, Max : std_logic_vector(7 downto 0);
+    begin
+        if unsigned(A) < unsigned(B) then
+            Min := A;
+            Max := B;
+        else
+            Min := B;
+            Max := A;
+        end if;
+        -- Devolvemos el Min y el Max concatenados. El resultado es de 16 bits.
+        return Min & Max;
+    end function comparator_select;
+
+    -- --- Señales Intermedias para las 6 Etapas ---
+    -- Inputs: P1 a P9
+    -- Etapa 1: Resultados de las primeras 4 comparaciones
+    signal T1 : std_logic_vector(15 downto 0); -- C1(P1, P2)
+    signal T2 : std_logic_vector(15 downto 0); -- C2(P3, P4)
+    signal T3 : std_logic_vector(15 downto 0); -- C3(P5, P6)
+    signal T4 : std_logic_vector(15 downto 0); -- C4(P7, P8)
+    signal S1 : pixel_array; -- Primer nivel de valores ordenados (O1 a O9)
+
+    -- Etapa 2: Combinación de pares ordenados (8 comparadores)
+    signal T5, T6, T7, T8 : std_logic_vector(15 downto 0); 
+    signal S2 : pixel_array; 
+
+    -- Etapa 3: Combinación de sub-listas (4 comparadores)
+    signal T9, T10 : std_logic_vector(15 downto 0);
+    signal S3 : pixel_array;
+
+    -- Etapa 4: Combinación final (7 comparadores)
+    signal T11, T12, T13, T14 : std_logic_vector(15 downto 0);
+    signal S4 : pixel_array;
+
+    -- Etapa 5: (1 comparador)
+    signal T15 : std_logic_vector(15 downto 0);
+    signal S5 : pixel_array;
+    
+    -- Etapa 6: Salida final ordenada (O1 a O9)
+    signal O : pixel_array; 
+    
+begin
+
+    -- ----------------------------------------------------------------------
+    -- ETAPA 1: Comparaciones Iniciales (4 Comparadores)
+    -- ----------------------------------------------------------------------
+    T1 <= comparator_select(P1, P2); S1(1) <= T1(15 downto 8); S1(2) <= T1(7 downto 0); -- Min, Max
+    T2 <= comparator_select(P3, P4); S1(3) <= T2(15 downto 8); S1(4) <= T2(7 downto 0);
+    T3 <= comparator_select(P5, P6); S1(5) <= T3(15 downto 8); S1(6) <= T3(7 downto 0);
+    T4 <= comparator_select(P7, P8); S1(7) <= T4(15 downto 8); S1(8) <= T4(7 downto 0);
+    S1(9) <= P9; -- P9 pasa directo
+    
+    -- ----------------------------------------------------------------------
+    -- ETAPA 2: Combinación y Ordenamiento Parcial (8 Comparadores)
+    -- ----------------------------------------------------------------------
+    T5 <= comparator_select(S1(1), S1(3)); S2(1) <= T5(15 downto 8); S2(3) <= T5(7 downto 0);
+    T6 <= comparator_select(S1(2), S1(4)); S2(2) <= T6(15 downto 8); S2(4) <= T6(7 downto 0);
+
+    T7 <= comparator_select(S1(5), S1(7)); S2(5) <= T7(15 downto 8); S2(7) <= T7(7 downto 0);
+    T8 <= comparator_select(S1(6), S1(8)); S2(6) <= T8(15 downto 8); S2(8) <= T8(7 downto 0);
+    S2(9) <= S1(9); -- P9 pasa directo
+
+    -- Etapa 2.5 (Batcher Merge of 4 and 5 elements)
+    -- Comparadores 9 a 12
+    T9 <= comparator_select(S2(3), S2(5)); S3(3) <= T9(15 downto 8); S3(5) <= T9(7 downto 0);
+    T10 <= comparator_select(S2(4), S2(6)); S3(4) <= T10(15 downto 8); S3(6) <= T10(7 downto 0);
+
+    -- Señales que pasan directo en Etapa 2.5
+    S3(1) <= S2(1);
+    S3(2) <= S2(2);
+    S3(7) <= S2(7);
+    S3(8) <= S2(8);
+    S3(9) <= S2(9);
+
+    -- ----------------------------------------------------------------------
+    -- ETAPA 3: Fusión final de las dos mitades (4 comparadores)
+    -- ----------------------------------------------------------------------
+    -- Comparadores 13 a 16
+    T11 <= comparator_select(S3(2), S3(3)); S4(2) <= T11(15 downto 8); S4(3) <= T11(7 downto 0);
+    T12 <= comparator_select(S3(4), S3(5)); S4(4) <= T12(15 downto 8); S4(5) <= T12(7 downto 0);
+    T13 <= comparator_select(S3(6), S3(7)); S4(6) <= T13(15 downto 8); S4(7) <= T13(7 downto 0);
+    T14 <= comparator_select(S3(8), S3(9)); S4(8) <= T14(15 downto 8); S4(9) <= T14(7 downto 0);
+
+    -- Señales que pasan directo en Etapa 3
+    S4(1) <= S3(1);
+
+    -- ----------------------------------------------------------------------
+    -- ETAPA 4: Fusión final - Primer nivel de pares (2 comparadores)
+    -- ----------------------------------------------------------------------
+    -- Comparadores 17 y 18
+    T15 <= comparator_select(S4(3), S4(5)); S5(3) <= T15(15 downto 8); S5(5) <= T15(7 downto 0);
+    O(4) <= S4(4); -- Pasa directo
+
+    -- Señales que pasan directo en Etapa 4
+    S5(1) <= S4(1);
+    S5(2) <= S4(2);
+    S5(6) <= S4(6);
+    S5(7) <= S4(7);
+    S5(8) <= S4(8);
+    S5(9) <= S4(9);
+
+    -- ----------------------------------------------------------------------
+    -- ETAPA 5 y 6: Ajustes finales y Mediana (7 comparadores)
+    -- ----------------------------------------------------------------------
+    -- Comparador 19 (O1, O2)
+    O(1) <= S5(1) when unsigned(S5(1)) < unsigned(S5(2)) else S5(2);
+    O(2) <= S5(2) when unsigned(S5(1)) < unsigned(S5(2)) else S5(1);
+
+    -- Comparador 20 (O3, O4)
+    O(3) <= S5(3) when unsigned(S5(3)) < unsigned(S4(4)) else S4(4);
+    O(4) <= S4(4) when unsigned(S5(3)) < unsigned(S4(4)) else S5(3);
+    
+    -- Comparador 21 (O5, O6)
+    O(5) <= S5(5) when unsigned(S5(5)) < unsigned(S5(6)) else S5(6);
+    O(6) <= S5(6) when unsigned(S5(5)) < unsigned(S5(6)) else S5(5);
+    
+    -- Comparador 22 (O7, O8)
+    O(7) <= S5(7) when unsigned(S5(7)) < unsigned(S5(8)) else S5(8);
+    O(8) <= S5(8) when unsigned(S5(7)) < unsigned(S5(8)) else S5(7);
+    
+    -- Comparador 23, 24, 25 (Ajustes finales de la red)
+    O(2) <= O(2) when unsigned(O(2)) < unsigned(O(3)) else O(3); -- C23
+    O(3) <= O(3) when unsigned(O(2)) < unsigned(O(3)) else O(2);
+    
+    O(4) <= O(4) when unsigned(O(4)) < unsigned(O(5)) else O(5); -- C24
+    O(5) <= O(5) when unsigned(O(4)) < unsigned(O(5)) else O(4);
+    
+    O(6) <= O(6) when unsigned(O(6)) < unsigned(O(7)) else O(7); -- C25
+    O(7) <= O(7) when unsigned(O(6)) < unsigned(O(7)) else O(6);
+
+    -- --- SELECCIÓN FINAL DE LA MEDIANA ---
+    -- El 5to valor (O5) de los 9 ordenados es la mediana.
+    Mediana_Out <= O(5);
+
+end architecture structural;

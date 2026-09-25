@@ -1,0 +1,82 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity median9 is
+    port(
+        p1,p2,p3,p4,p5,p6,p7,p8,p9 : in  std_logic_vector(7 downto 0);
+        med : out std_logic_vector(7 downto 0)
+    );
+end entity;
+
+architecture rtl of median9 is
+
+    -- Declaración correcta del arreglo
+    type vec9 is array (1 to 9) of std_logic_vector(7 downto 0);
+
+    signal x : vec9;
+
+begin
+
+    x(1) <= p1; x(2) <= p2; x(3) <= p3;
+    x(4) <= p4; x(5) <= p5; x(6) <= p6;
+    x(7) <= p7; x(8) <= p8; x(9) <= p9;
+
+    process(x)
+        variable v : vec9;
+        variable t : std_logic_vector(7 downto 0);
+    begin
+        v := x;
+
+        -- Bubble sort simple para ordenar 9 elementos
+        for i in 1 to 8 loop
+            for j in i+1 to 9 loop
+                if unsigned(v(i)) > unsigned(v(j)) then
+                    t := v(i);
+                    v(i) := v(j);
+                    v(j) := tlibrary ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity median9 is
+    port(
+        p1,p2,p3,p4,p5,p6,p7,p8,p9 : in  std_logic_vector(7 downto 0);
+        med : out std_logic_vector(7 downto 0)
+    );
+end entity;
+
+architecture rtl of median9 is
+    type vec9 is array (1 to 9) of std_logic_vector(7 downto 0);
+    signal x : vec9;
+begin
+    x(1) <= p1; x(2) <= p2; x(3) <= p3;
+    x(4) <= p4; x(5) <= p5; x(6) <= p6;
+    x(7) <= p7; x(8) <= p8; x(9) <= p9;
+
+    process(x)
+        variable v : vec9;
+        variable t : std_logic_vector(7 downto 0);
+    begin
+        v := x;
+        -- Ordenamiento simple (bubble/selection) para 9 elementos
+        for i in 1 to 8 loop
+            for j in i+1 to 9 loop
+                if unsigned(v(i)) > unsigned(v(j)) then
+                    t := v(i);
+                    v(i) := v(j);
+                    v(j) := t;
+                end if;
+            end loop;
+        end loop;
+        med <= v(5);
+    end process;
+end architecture;
+;
+                end if;
+            end loop;
+        end loop;
+
+        med <= v(5);  -- valor mediana
+    end process;
+
+end rtl;

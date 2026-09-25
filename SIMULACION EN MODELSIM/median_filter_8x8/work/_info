@@ -1,0 +1,356 @@
+m255
+K4
+z2
+!s11e vcom 2020.1 2020.02, Feb 28 2020
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dC:/Users/USER/Documents/FPGA_MATLAB/Verilog Image Filters Fpga
+Eline_buffer
+Z0 w1764287669
+Z1 DPx4 ieee 11 numeric_std 0 22 aU^R8eGcicLcUFIaBQSL>3
+Z2 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z3 DPx4 ieee 14 std_logic_1164 0 22 cVAk:aDinOX8^VGI1ekP<3
+!i122 252
+Z4 dC:/Users/USER/Downloads/median_filter_8x8
+Z5 8C:\Users\USER\Downloads\median_filter_8x8\line_buffer.vhd
+Z6 FC:\Users\USER\Downloads\median_filter_8x8\line_buffer.vhd
+l0
+L5 1
+V0aTZ`PlW6^nbM9YY8HYM_0
+!s100 3SQadXNkK8]Vm`m8o5AIB3
+Z7 OV;C;2020.1;71
+32
+Z8 !s110 1764369458
+!i10b 1
+Z9 !s108 1764369458.000000
+Z10 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:\Users\USER\Downloads\median_filter_8x8\line_buffer.vhd|
+Z11 !s107 C:\Users\USER\Downloads\median_filter_8x8\line_buffer.vhd|
+!i113 1
+Z12 o-work work -2002 -explicit
+Z13 tExplicit 1 CvgOpt 0
+Artl
+R1
+R2
+R3
+DEx4 work 11 line_buffer 0 22 0aTZ`PlW6^nbM9YY8HYM_0
+!i122 252
+l17
+L14 18
+VO9QoeVdfa8TngO7XAIElX3
+!s100 O@:nMPK^:DcRbN>WdOd_j1
+R7
+32
+R8
+!i10b 1
+R9
+R10
+R11
+!i113 1
+R12
+R13
+Emedian9
+Z14 w1764287879
+R1
+R2
+R3
+!i122 254
+R4
+Z15 8C:\Users\USER\Downloads\median_filter_8x8\median9.vhd
+Z16 FC:\Users\USER\Downloads\median_filter_8x8\median9.vhd
+l0
+L5 1
+VC9JE4SKj3Kae1KDk8l;D_2
+!s100 UI5YWz?:Jn1f<;i0jg0R>2
+R7
+32
+Z17 !s110 1764369459
+!i10b 1
+Z18 !s108 1764369459.000000
+Z19 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:\Users\USER\Downloads\median_filter_8x8\median9.vhd|
+Z20 !s107 C:\Users\USER\Downloads\median_filter_8x8\median9.vhd|
+!i113 1
+R12
+R13
+Artl
+R1
+R2
+R3
+Z21 DEx4 work 7 median9 0 22 C9JE4SKj3Kae1KDk8l;D_2
+!i122 254
+l18
+L12 38
+VhS?V7ZXbEa@8mW?_J8c4T1
+!s100 KzY?k2c2>K0?N_MK1Ag7h0
+R7
+32
+R17
+!i10b 1
+R18
+R19
+R20
+!i113 1
+R12
+R13
+Eram_8x8
+Z22 w1764287725
+R1
+R2
+R3
+!i122 251
+R4
+Z23 8C:\Users\USER\Downloads\median_filter_8x8\RAM_8X8.vhd
+Z24 FC:\Users\USER\Downloads\median_filter_8x8\RAM_8X8.vhd
+l0
+L5 1
+VE;XXBCFBZjG;ZO5V;IOl02
+!s100 Sk4R`GHof>7<dTWda?:e60
+R7
+32
+R8
+!i10b 1
+R9
+Z25 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:\Users\USER\Downloads\median_filter_8x8\RAM_8X8.vhd|
+Z26 !s107 C:\Users\USER\Downloads\median_filter_8x8\RAM_8X8.vhd|
+!i113 1
+R12
+R13
+Artl
+R1
+R2
+R3
+DEx4 work 7 ram_8x8 0 22 E;XXBCFBZjG;ZO5V;IOl02
+!i122 251
+l18
+L15 14
+VNb4:@[=n@bV0F<_1^R4H`2
+!s100 >X:]L[dZ]@?Ok>eNKO4B;2
+R7
+32
+R8
+!i10b 1
+R9
+R25
+R26
+!i113 1
+R12
+R13
+Erom_8x8
+Z27 w1764287655
+R1
+R2
+R3
+!i122 63
+R4
+Z28 8C:\Users\USER\Downloads\median_filter_8x8\ROM_8X8.vhd
+Z29 FC:\Users\USER\Downloads\median_filter_8x8\ROM_8X8.vhd
+l0
+L5 1
+V^]`n7SzH@3dfk0XIo[6YI1
+!s100 :iWM;LH=K`iz=Y=[A9HHY1
+R7
+32
+Z30 !s110 1764290204
+!i10b 1
+Z31 !s108 1764290204.000000
+Z32 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:\Users\USER\Downloads\median_filter_8x8\ROM_8X8.vhd|
+Z33 !s107 C:\Users\USER\Downloads\median_filter_8x8\ROM_8X8.vhd|
+!i113 1
+R12
+R13
+Artl
+R1
+R2
+R3
+DEx4 work 7 rom_8x8 0 22 ^]`n7SzH@3dfk0XIo[6YI1
+!i122 63
+l25
+L12 17
+V33f;UPkjWLN94YOZK?fYS1
+!s100 ?8L0E^IV8U3YiPETGG?iz0
+R7
+32
+R30
+!i10b 1
+R31
+R32
+R33
+!i113 1
+R12
+R13
+Erom_8x8_scaled
+Z34 w1764359958
+R1
+R2
+R3
+!i122 257
+R4
+Z35 8C:\Users\USER\Downloads\filter8x8quartus\ROM_8X8_scaled.vhd
+Z36 FC:\Users\USER\Downloads\filter8x8quartus\ROM_8X8_scaled.vhd
+l0
+L5 1
+VFifXE[9>4c9BZCJ4meYE83
+!s100 Xk1>Bk@i0^][n?OmGJ_8T2
+R7
+32
+Z37 !s110 1764369460
+!i10b 1
+Z38 !s108 1764369460.000000
+Z39 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:\Users\USER\Downloads\filter8x8quartus\ROM_8X8_scaled.vhd|
+Z40 !s107 C:\Users\USER\Downloads\filter8x8quartus\ROM_8X8_scaled.vhd|
+!i113 1
+R12
+R13
+Artl
+R1
+R2
+R3
+Z41 DEx4 work 14 rom_8x8_scaled 0 22 FifXE[9>4c9BZCJ4meYE83
+!i122 257
+l30
+Z42 L13 28
+Z43 VY14?O64ME?h1mcSU0fR9L0
+Z44 !s100 VD_GC^KFNC3NI9CY[S0fA0
+R7
+32
+R37
+!i10b 1
+R38
+R39
+R40
+!i113 1
+R12
+R13
+Etb_top_filter
+Z45 w1764367370
+R1
+R2
+R3
+!i122 256
+R4
+Z46 8C:\Users\USER\Downloads\median_filter_8x8\tb_top_filter.vhd
+Z47 FC:\Users\USER\Downloads\median_filter_8x8\tb_top_filter.vhd
+l0
+L5 1
+VG5J8lOD>@f[IMoLooz>V]3
+!s100 ;EePcN0T5PEmiYa>VN0?i2
+R7
+32
+R37
+!i10b 1
+R18
+Z48 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:\Users\USER\Downloads\median_filter_8x8\tb_top_filter.vhd|
+Z49 !s107 C:\Users\USER\Downloads\median_filter_8x8\tb_top_filter.vhd|
+!i113 1
+R12
+R13
+Asim
+Z50 DEx4 work 10 top_filter 0 22 4@EIRhECT^z^bFOTMG3UX1
+R41
+R1
+R2
+R3
+DEx4 work 13 tb_top_filter 0 22 G5J8lOD>@f[IMoLooz>V]3
+!i122 256
+l24
+L8 89
+VR90X=BTWAfW7^X5la:Lgl1
+!s100 dd7HDihc0z35U1b8zPQz>2
+R7
+32
+R37
+!i10b 1
+R18
+R48
+R49
+!i113 1
+R12
+R13
+Etop_filter
+Z51 w1764369447
+R1
+R2
+R3
+!i122 255
+R4
+Z52 8C:\Users\USER\Downloads\median_filter_8x8\top_filter.vhd
+Z53 FC:\Users\USER\Downloads\median_filter_8x8\top_filter.vhd
+l0
+L5 1
+V4@EIRhECT^z^bFOTMG3UX1
+!s100 :Ya8>f>CWQ]<WB5_fkmHg1
+R7
+32
+R17
+!i10b 1
+R18
+Z54 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:\Users\USER\Downloads\median_filter_8x8\top_filter.vhd|
+Z55 !s107 C:\Users\USER\Downloads\median_filter_8x8\top_filter.vhd|
+!i113 1
+R12
+R13
+Artl
+R21
+R1
+R2
+R3
+R50
+!i122 255
+l45
+L18 121
+VIWDY^ia9e;GMc]X:CJ6_`3
+!s100 =FH5QlE_oZTUfGZ0IUNjR1
+R7
+32
+R17
+!i10b 1
+R18
+R54
+R55
+!i113 1
+R12
+R13
+Ewindow3x3
+Z56 w1764363571
+R2
+R3
+!i122 253
+R4
+Z57 8C:\Users\USER\Downloads\median_filter_8x8\window3x3.vhd
+Z58 FC:\Users\USER\Downloads\median_filter_8x8\window3x3.vhd
+l0
+L4 1
+VUIc6j?H=fDM;OX:Hn[kdG1
+!s100 mV5b;95n75T<eFIR:Og2n1
+R7
+32
+R17
+!i10b 1
+R18
+Z59 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:\Users\USER\Downloads\median_filter_8x8\window3x3.vhd|
+Z60 !s107 C:\Users\USER\Downloads\median_filter_8x8\window3x3.vhd|
+!i113 1
+R12
+R13
+Artl
+R2
+R3
+DEx4 work 9 window3x3 0 22 UIc6j?H=fDM;OX:Hn[kdG1
+!i122 253
+l26
+L18 44
+V9_TSdDKz^TLG6b32Z>o@c1
+!s100 M3j1_UfHEfZ[ceZTg[mX11
+R7
+32
+R17
+!i10b 1
+R18
+R59
+R60
+!i113 1
+R12
+R13

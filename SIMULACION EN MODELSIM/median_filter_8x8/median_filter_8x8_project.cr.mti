@@ -1,0 +1,66 @@
+C:/Users/USER/Downloads/median_filter_8x8/window3x3.vhd {1 {vcom -work work -2002 -explicit -stats=none {C:\Users\USER\Downloads\median_filter_8x8\window3x3.vhd}
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity window3x3
+-- Compiling architecture rtl of window3x3
+
+} {} {}} C:/Users/USER/Downloads/median_filter_8x8/RAM_8X8.vhd {1 {vcom -work work -2002 -explicit -stats=none {C:\Users\USER\Downloads\median_filter_8x8\RAM_8X8.vhd}
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity RAM_8x8
+-- Compiling architecture rtl of RAM_8x8
+
+} {} {}} C:/Users/USER/Downloads/median_filter_8x8/median9.vhd {1 {vcom -work work -2002 -explicit -stats=none {C:\Users\USER\Downloads\median_filter_8x8\median9.vhd}
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity median9
+-- Compiling architecture rtl of median9
+
+} {} {}} C:/Users/USER/Downloads/median_filter_8x8/top_filter.vhd {1 {vcom -work work -2002 -explicit -stats=none {C:\Users\USER\Downloads\median_filter_8x8\top_filter.vhd}
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity top_filter
+-- Compiling architecture rtl of top_filter
+-- Loading entity median9
+
+} {} {}} C:/Users/USER/Downloads/median_filter_8x8/tb_top_filter.vhd {1 {vcom -work work -2002 -explicit -stats=none {C:\Users\USER\Downloads\median_filter_8x8\tb_top_filter.vhd}
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity tb_top_filter
+-- Compiling architecture sim of tb_top_filter
+-- Loading entity ROM_8x8_scaled
+-- Loading entity top_filter
+
+} {} {}} C:/Users/USER/Downloads/filter8x8quartus/ROM_8X8_scaled.vhd {1 {vcom -work work -2002 -explicit -stats=none {C:\Users\USER\Downloads\filter8x8quartus\ROM_8X8_scaled.vhd}
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity ROM_8x8_scaled
+-- Compiling architecture rtl of ROM_8x8_scaled
+
+} {} {}} C:/Users/USER/Downloads/median_filter_8x8/line_buffer.vhd {1 {vcom -work work -2002 -explicit -stats=none {C:\Users\USER\Downloads\median_filter_8x8\line_buffer.vhd}
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity line_buffer
+-- Compiling architecture rtl of line_buffer
+
+} {} {}}

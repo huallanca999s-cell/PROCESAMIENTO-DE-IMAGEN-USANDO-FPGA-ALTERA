@@ -1,0 +1,183 @@
+-- top.vhdl
+-- Módulo principal de integración, control y buffer de líneas.
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity top is
+    port (
+        CLK_50      : in  std_logic; -- Clock de la DE2-115
+        RESET_n     : in  std_logic; -- Reset asíncrono (activo bajo)
+        -- Señales de E/S de la placa (ej: LEDs para DONE)
+        LED         : out std_logic_vector(7 downto 0)
+    );
+end entity top;
+
+architecture structural of top is
+
+    -- --- Parámetros de la Imagen (204x204) ---
+    constant C_FILAS : integer := 204;
+    constant C_COLS  : integer := 204;
+    constant C_DEPTH : integer := C_FILAS * C_COLS; -- 41616 píxeles
+    constant C_ADDR_BITS : integer := 16; -- ceil(log2(41616)) = 16
+    constant C_DELAY : integer := C_COLS + 1; -- Retraso para que la ventana 3x3 esté llena
+
+    -- --- Señales de Memoria ---
+    signal addr_read, addr_write : std_logic_vector(C_ADDR_BITS-1 downto 0);
+    signal data_rom_out, data_ram_in : std_logic_vector(7 downto 0); -- ROM (Lectura), RAM (Escritura)
+    signal data_ram_out : std_logic_vector(7 downto 0); -- Salida de la RAM (No usada en este diseño)
+    signal we_ram        : std_logic; -- Habilitar escritura RAM
+
+    -- --- Señales de Control de Píxeles ---
+    signal pixel_count   : integer range 0 to C_DEPTH;
+    signal line_counter  : integer range 0 to C_FILAS;
+    
+    -- --- Señales del Buffer de Líneas (Almacenan los píxeles de las dos líneas previas) ---
+    -- NOTA: Para una implementación real eficiente, estos deberían ser IP Cores de RAM.
+    -- Aquí los usaremos conceptualmente o como grandes registros (no recomendado para C_COLS=204).
+    signal lb_line_m1_in, lb_line_m1_out : std_logic_vector(7 downto 0); -- Línea L-1
+    signal lb_line_m2_in, lb_line_m2_out : std_logic_vector(7 downto 0); -- Línea L-2
+    signal lb_write_en : std_logic;
+
+    -- --- Señales para la Ventana 3x3 (Píxeles del Kernel) ---
+    -- P1, P2, P3: Fila Actual (L) | P4, P5, P6: Fila Anterior (L-1) | P7, P8, P9: Fila 2x Anterior (L-2)
+    signal P1, P2, P3, P4, P5, P6, P7, P8, P9 : std_logic_vector(7 downto 0); 
+    
+    -- --- Señales del Filtro ---
+    signal mediana_result : std_logic_vector(7 downto 0);
+    signal start_processing : std_logic; -- Señal para indicar cuándo la ventana 3x3 está completa
+
+    -- --- Declaración de Componentes ---
+
+    -- Componente del Filtro
+    component median9 is
+        port (
+            P1, P2, P3, P4, P5, P6, P7, P8, P9 : in  std_logic_vector(7 downto 0);
+            Mediana_Out                        : out std_logic_vector(7 downto 0)
+        );
+    end component median9;
+
+    -- Componente de la ROM (Lectura de la imagen - Reemplazar con IP Core real)
+    component ROM_IMG is
+        port (
+            address : in  std_logic_vector(C_ADDR_BITS-1 downto 0);
+            clock   : in  std_logic;
+            q       : out std_logic_vector(7 downto 0)
+        );
+    end component ROM_IMG;
+
+    -- Componente de la RAM (Escritura de la imagen filtrada - Reemplazar con IP Core real)
+    component RAM_IMG is
+        port (
+            address : in  std_logic_vector(C_ADDR_BITS-1 downto 0);
+            data    : in  std_logic_vector(7 downto 0);
+            we      : in  std_logic;
+            clock   : in  std_logic;
+            q       : out std_logic_vector(7 downto 0)
+        );
+    end component RAM_IMG;
+
+begin
+    -- 1. Instanciación del Filtro de Mediana
+    MEDIANA_UNIT : median9  
+    port map (
+        P1 => P1, P2 => P2, P3 => P3, 
+        P4 => P4, P5 => P5, P6 => P6, 
+        P7 => P7, P8 => P8, P9 => P9,
+        Mediana_Out => mediana_result
+    );
+    
+    -- 2. Instanciación de las Memorias (ROM/RAM)
+    ROM_INST : ROM_IMG 
+    port map (
+        address => addr_read,
+        clock   => CLK_50,
+        q       => data_rom_out -- Píxel de entrada
+    );
+
+    RAM_INST : RAM_IMG 
+    port map (
+        address => addr_write,
+        data    => mediana_result, -- El dato a escribir es el resultado del filtro
+        we      => we_ram,
+        clock   => CLK_50,
+        q       => data_ram_out -- No se usa la lectura
+    );
+
+    -- 3. Proceso de Control de Direcciones y Buffer de Líneas (Pipeline)
+    process(CLK_50, RESET_n)
+    begin
+        if RESET_n = '0' then
+            pixel_count <= 0;
+            addr_read   <= (others => '0');
+            addr_write  <= (others => '0');
+            we_ram      <= '0';
+            start_processing <= '0';
+            
+            -- Resetear Buffers de Desplazamiento
+            P1 <= (others => '0'); P2 <= (others => '0'); P3 <= (others => '0');
+            P4 <= (others => '0'); P5 <= (others => '0'); P6 <= (others => '0');
+            P7 <= (others => '0'); P8 <= (others => '0'); P9 <= (others => '0');
+            LED <= (others => '0');
+            
+        elsif rising_edge(CLK_50) then
+            
+            -- Lógica de Lectura y Contadores
+            if pixel_count < C_DEPTH then
+                addr_read <= std_logic_vector(to_unsigned(pixel_count, C_ADDR_BITS));
+                pixel_count <= pixel_count + 1;
+                
+                -- --- Lógica de Desplazamiento del Buffer de Ventana 3x3 ---
+                -- Fila L (Actual) - Los 3 Shift Registers reciben el nuevo píxel de la ROM
+                P3 <= P2;
+                P2 <= P1;
+                P1 <= data_rom_out; -- Nuevo píxel leído de la ROM
+
+                -- Fila L-1 (Anterior) - Desplazamiento + Píxel de la línea previa
+                P6 <= P5;
+                P5 <= P4;
+                -- **Aquí iría la salida del Line Buffer 1 (LB1)**
+                -- Por simplicidad, asumiremos un Line Buffer ideal que entrega el dato.
+                -- Este valor debería ser: LB1_out. Usamos P9_next_reg temporalmente.
+                -- P4 <= LB1_out_data; 
+                P4 <= P9; -- Sustitución temporal para estructura de shift
+
+                -- Fila L-2 (Dos líneas antes) - Desplazamiento + Píxel de la línea 2x previa
+                P9 <= P8;
+                P8 <= P7;
+                -- **Aquí iría la salida del Line Buffer 2 (LB2)**
+                -- P7 <= LB2_out_data;
+                P7 <= P6; -- Sustitución temporal para estructura de shift
+                
+                -- --- Lógica de Control ---
+                
+                -- start_processing se activa cuando se han cargado las dos primeras líneas
+                -- y los primeros dos píxeles de la tercera línea (para centrar la ventana en P5).
+                if pixel_count >= C_DELAY then
+                    start_processing <= '1';
+                else
+                    start_processing <= '0';
+                end if;
+
+            else
+                -- Proceso de lectura terminado
+                LED(0) <= '1'; -- Señal de 'DONE'
+            end if;
+
+            -- Lógica de Escritura (Escritura en la RAM)
+            if start_processing = '1' then
+                we_ram <= '1';
+                -- La escritura debe ser en la dirección del píxel P5, con un retraso del pipeline.
+                addr_write <= std_logic_vector(to_unsigned(pixel_count - C_DELAY, C_ADDR_BITS));
+            else
+                we_ram <= '0';
+            end if;
+            
+        end if;
+    end process;
+
+    -- Conectar el resultado del filtro a la entrada de la RAM (data_ram_in)
+    data_ram_in <= mediana_result;
+    
+end architecture structural;
